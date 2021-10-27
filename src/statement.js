@@ -44,7 +44,8 @@ function statement(invoice, plays) {
   result += `Amount owed is ${format(totalAmount / 100)}\n`;
   result += `You earned ${volumeCredits} credits\n`;
   console.log(result);
-  return result;
+  return Promise.resolve(result);
 }
-const a = statement(invoices[0], plays);
-console.log(a);
+statement(invoices[0], plays).then((result) => console.log(result));
+
+module.exports.statement = statement;
