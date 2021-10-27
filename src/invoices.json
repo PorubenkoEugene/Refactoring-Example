@@ -3,15 +3,15 @@
     "customer": "BigCo",
     "performances": [
       {
-        "playlD": "hamlet",
+        "playID": "hamlet",
         "audience": 55
       },
       {
-        "playlD": "as-like",
+        "playID": "as-like",
         "audience": 35
       },
       {
-        "playlD": "othello",
+        "playID": "othello",
         "audience": 40
       }
     ]
@@ -20,19 +20,19 @@
     "customer": "SmallCo",
     "performances": [
       {
-        "playlD": "hamlet",
+        "playID": "hamlet",
         "audience": 65
       },
       {
-        "playlD": "hamlet",
+        "playID": "hamlet",
         "audience": 45
       },
       {
-        "playlD": "as-like",
+        "playID": "as-like",
         "audience": 40
       },
       {
-        "playlD": "othello",
+        "playID": "othello",
         "audience": 30
       }
     ]
