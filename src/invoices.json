@@ -15,5 +15,26 @@
         "audience": 40
       }
     ]
+  },
+  {
+    "customer": "SmallCo",
+    "performances": [
+      {
+        "playlD": "hamlet",
+        "audience": 65
+      },
+      {
+        "playlD": "hamlet",
+        "audience": 45
+      },
+      {
+        "playlD": "as-like",
+        "audience": 40
+      },
+      {
+        "playlD": "othello",
+        "audience": 30
+      }
+    ]
   }
 ]
