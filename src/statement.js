@@ -6,25 +6,15 @@ function statement(invoice, plays) {
 
   let volumeCredits = 0;
   let result = `Statement for ${invoice.customer}\n`;
-  const format = new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
-    minimumFractionDigits: 2,
-  }).format;
 
   for (let perf of invoice.performances) {
-    let thisAmount = amountFor(perf);
-    // Добавление бонусов
-    volumeCredits += Math.max(perf.audience - 30, 0);
-    // Дополнительный бонус за каждые 10 комедий
-    if ('comedy' === playFor(perf).type)
-      volumeCredits += Math.floor(perf.audience / 5);
+    volumeCredits += volumeCreditsFor(perf);
     // Вывод строки счета
-    result += `${playFor(perf).name}: ${format(thisAmount / 100)}`;
+    result += `${playFor(perf).name}: ${usd(amountFor(perf) / 100)}`;
     result += ` (${perf.audience} seats)\n`;
-    totalAmount += thisAmount;
+    totalAmount += amountFor(perf);
   }
-  result += `Amount owed is ${format(totalAmount / 100)}\n`;
+  result += `Amount owed is ${usd(totalAmount / 100)}\n`;
   result += `You earned ${volumeCredits} credits\n`;
   return Promise.resolve(result);
 }
@@ -53,6 +43,25 @@ function amountFor(aPerfomance) {
 
 function playFor(aPerformance) {
   return plays[aPerformance.playID];
+}
+
+function volumeCreditsFor(aPerfomance) {
+  let result = 0;
+  // Добавление бонусов
+  result += Math.max(aPerfomance.audience - 30, 0);
+  // Дополнительный бонус за каждые 10 комедий
+  if ('comedy' === playFor(aPerfomance).type) {
+    result += Math.floor(aPerfomance.audience / 5);
+  }
+  return result;
+}
+
+function usd(aNumber) {
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    minimumFractionDigits: 2,
+  }).format(aNumber);
 }
 
 statement(invoices[1], plays).then((result) => console.log(result));
