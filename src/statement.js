@@ -2,19 +2,55 @@ const plays = require('./plays.json');
 const invoices = require('./invoices.json');
 
 function statement(invoice, plays) {
-  let totalAmount = 0;
-
   let result = `Statement for ${invoice.customer}\n`;
   for (let perf of invoice.performances) {
     // Вывод строки счета
     result += `${playFor(perf).name}: ${usd(amountFor(perf) / 100)}`;
     result += ` (${perf.audience} seats)\n`;
-    totalAmount += amountFor(perf);
   }
 
-  result += `Amount owed is ${usd(totalAmount / 100)}\n`;
+  result += `Amount owed is ${usd(totalAmount(invoice) / 100)}\n`;
   result += `You earned ${totalVolumeCredits(invoice)} credits\n`;
   return Promise.resolve(result);
+}
+
+function totalAmount(invoice) {
+  let result = 0;
+  for (let perf of invoice.performances) {
+    result += amountFor(perf);
+  }
+  return result;
+}
+
+function totalVolumeCredits(invoice) {
+  let result = 0;
+  for (let perf of invoice.performances) {
+    result += volumeCreditsFor(perf);
+  }
+  return result;
+}
+
+function usd(aNumber) {
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    minimumFractionDigits: 2,
+  }).format(aNumber);
+}
+
+function volumeCreditsFor(aPerfomance) {
+  let result = 0;
+  // Добавление бонусов
+  result += Math.max(aPerfomance.audience - 30, 0);
+  // Дополнительный бонус за каждые 10 комедий
+  if ('comedy' === playFor(aPerfomance).type) {
+    result += Math.floor(aPerfomance.audience / 5);
+  }
+  return result;
+}
+
+function playFor(aPerformance) {
+  return plays[aPerformance.playID];
 }
 
 function amountFor(aPerfomance) {
@@ -37,37 +73,6 @@ function amountFor(aPerfomance) {
       throw new Error(`unknown type: ${playFor(aPerfomance).type}`);
   }
   return result;
-}
-
-function playFor(aPerformance) {
-  return plays[aPerformance.playID];
-}
-
-function volumeCreditsFor(aPerfomance) {
-  let result = 0;
-  // Добавление бонусов
-  result += Math.max(aPerfomance.audience - 30, 0);
-  // Дополнительный бонус за каждые 10 комедий
-  if ('comedy' === playFor(aPerfomance).type) {
-    result += Math.floor(aPerfomance.audience / 5);
-  }
-  return result;
-}
-
-function usd(aNumber) {
-  return new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
-    minimumFractionDigits: 2,
-  }).format(aNumber);
-}
-
-function totalVolumeCredits(invoice) {
-  let volumeCredits = 0;
-  for (let perf of invoice.performances) {
-    volumeCredits += volumeCreditsFor(perf);
-  }
-  return volumeCredits;
 }
 
 statement(invoices[1], plays).then((result) => console.log(result));
