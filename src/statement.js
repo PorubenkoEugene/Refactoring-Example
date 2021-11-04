@@ -34,6 +34,6 @@ async function htmlStatement(invoice) {
 
 async function renderHtml(data) {}
 
-statement(invoices[1], plays).then((result) => console.log(result));
+statement(invoices[1]).then((result) => console.log(result));
 
 module.exports.statement = statement;

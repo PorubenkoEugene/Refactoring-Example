@@ -3,7 +3,7 @@ const plays = require('../plays.json');
 const invoices = require('../invoices.json');
 
 test('Statement for BigCo', async () => {
-  expect(await statement(invoices[0], plays)).toMatch(
+  expect(await statement(invoices[0])).toMatch(
     'Statement for BigCo\n' +
       'Hamlet: $650.00 (55 seats)\n' +
       'As You Like It: $580.00 (35 seats)\n' +
@@ -14,7 +14,7 @@ test('Statement for BigCo', async () => {
 });
 
 test('Statement for SmallCo', async () => {
-  expect(await statement(invoices[1], plays)).toMatch(
+  expect(await statement(invoices[1])).toMatch(
     'Statement for SmallCo\n' +
       'Hamlet: $750.00 (65 seats)\n' +
       'Hamlet: $550.00 (45 seats)\n' +
